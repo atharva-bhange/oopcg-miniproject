@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    [SerializeField] int rows = 10;
-    [SerializeField] int cols = 10;
+    [Range(1, 50)][SerializeField] int rows = 20;
+    [Range(1, 50)][SerializeField] int cols = 20;
     [SerializeField] float blockSize = 1;
     void Start()
     {
