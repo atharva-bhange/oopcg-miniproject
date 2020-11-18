@@ -5,13 +5,18 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    [Range(1, 50)][SerializeField] int rows = 20;
-    [Range(1, 50)][SerializeField] int cols = 20;
+    [Range(1, 50)][SerializeField] public int rows = 20;
+    [Range(1, 50)][SerializeField] public int cols = 20;
     [SerializeField] float blockSize = 1;
     private Cell cellComponent;
+    public List<Cell> grid = new List<Cell>();
+    public Cell current;
+    Stack<Cell> stack = new Stack<Cell>();
+
     void Start()
     {
         GenerateGrid();
+        GenerateMaze();
     }
 
 	private void GenerateGrid()
@@ -23,10 +28,13 @@ public class GridManager : MonoBehaviour
             {
                 GameObject cell = Instantiate(referenceCell, transform);
                 cellComponent = cell.GetComponent<Cell>();
-                float zPos = col * blockSize;
-                float xPos = row * blockSize;
+                float zPos = row * blockSize;
+                float xPos = col * blockSize;
                 cell.transform.position = new Vector3(xPos , 0f , zPos);
-                
+                cell.name = $"({row}, {col})";
+                cellComponent.i = row;
+                cellComponent.j = col;
+                grid.Add(cellComponent);
                 DrawWalls(referenceWall, cell);
             }
         }
@@ -37,33 +45,82 @@ public class GridManager : MonoBehaviour
 	private void DrawWalls(GameObject referenceWall, GameObject cell)
 	{
         bool [] wall = cellComponent.walls;
-        if (wall[0]) {
+        for (int i = 0; i < wall.Length; i++) {
             var parentPosition = cell.transform.position;
-            GameObject newWall = Instantiate(referenceWall, cell.transform);
-            newWall.transform.position = new Vector3(parentPosition.x ,parentPosition.y + 1.5f , parentPosition.z + 0.5f);
-            newWall.transform.Rotate(0 ,90,0);
-        }
-
-        if (wall[1]) {
-            var parentPosition = cell.transform.position;
-            GameObject newWall = Instantiate(referenceWall, cell.transform);
-            newWall.transform.position = new Vector3(parentPosition.x+0.5f, parentPosition.y + 1.5f, parentPosition.z);
-            newWall.transform.Rotate(0, 180, 0);
-        }
-
-        if (wall[2])
-        {
-            var parentPosition = cell.transform.position;
-            GameObject newWall = Instantiate(referenceWall, cell.transform);
-            newWall.transform.position = new Vector3(parentPosition.x, parentPosition.y + 1.5f, parentPosition.z - 0.5f);
-            newWall.transform.Rotate(0, 270, 0);
-        }
-        if (wall[3])
-        {
-            var parentPosition = cell.transform.position;
-            GameObject newWall = Instantiate(referenceWall, cell.transform);
-            newWall.transform.position = new Vector3(parentPosition.x-0.5f, parentPosition.y + 1.5f, parentPosition.z);
-            newWall.transform.Rotate(0, 180, 0);
+            GameObject newWall = Instantiate(referenceWall, cell.transform);  
+            newWall.name = i.ToString();
+            Wall wallComponent = newWall.GetComponent<Wall>();
+            cellComponent.wallObjects.Add(newWall);
+            wallComponent.wallId = i;
+            wallComponent.setTransforAndAngle(parentPosition);
         }
     }
+
+    private void GenerateMaze()
+    {
+        current = grid[0];
+        current.isVisited = true;
+        stack.Push(current);
+        current.SetTopColor(Color.red);
+ 
+        current.SetTopColor(Color.blue);
+        StartCoroutine(FindNextCell());
+	}
+
+    IEnumerator FindNextCell()
+	{
+        while (true)
+        {
+            Cell next = current.CheckNeighbour();
+            if (next != null)
+            {
+                next.isVisited = true;
+                FindWallId(current, next);
+                Cell temp = current;
+                current = next;
+                stack.Push(current);
+                current.SetTopColor(Color.red);
+                temp.SetTopColor(Color.blue);
+            }
+            else
+            {
+                current.SetTopColor(Color.blue);
+                if (stack.Count > 0)
+                {
+                    current = stack.Pop();
+                    current.SetTopColor(Color.red);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            yield return new WaitForSeconds(0.05f);
+        }
+    }
+
+	private void FindWallId(Cell current, Cell next)
+	{
+        int xdif = current.i - next.i;
+        int ydif = current.j - next.j;
+        if (xdif == 0 && ydif == -1)
+        {
+            current.DestroyWall(1);
+            next.DestroyWall(3);
+        }
+        else if (xdif == 0 && ydif == 1)
+        {
+            current.DestroyWall(3);
+            next.DestroyWall(1);
+        }
+        else if (ydif == 0 && xdif == -1)
+        {
+            current.DestroyWall(0);
+            next.DestroyWall(2);
+        }
+        else {
+            current.DestroyWall(2);
+            next.DestroyWall(0);
+        }
+	}
 }
