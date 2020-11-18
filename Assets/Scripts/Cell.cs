@@ -99,5 +99,6 @@ public class Cell : MonoBehaviour
 	public void DestroyWall(int wallId)
 	{
 		Destroy(wallObjects[wallId]);
+		walls[wallId] = false;
 	}
 }
