@@ -8,15 +8,18 @@ public class GridManager : MonoBehaviour
     [Range(1, 50)][SerializeField] public int rows = 20;
     [Range(1, 50)][SerializeField] public int cols = 20;
     [SerializeField] float blockSize = 1;
+    [Range(0, 1)][SerializeField] float delay = 0.01f;
     private Cell cellComponent;
     public List<Cell> grid = new List<Cell>();
     public Cell current;
     Stack<Cell> stack = new Stack<Cell>();
+    Dictionary<Cell, Cell> parentMap = new Dictionary<Cell, Cell>();
 
-    void Start()
+    IEnumerator Start()
     {
         GenerateGrid();
-        GenerateMaze();
+        yield return GenerateMaze();
+        yield return dfs();
     }
 
 	private void GenerateGrid()
@@ -56,7 +59,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private void GenerateMaze()
+    IEnumerator GenerateMaze()
     {
         current = grid[0];
         current.isVisited = true;
@@ -64,18 +67,18 @@ public class GridManager : MonoBehaviour
         current.SetTopColor(Color.red);
  
         current.SetTopColor(Color.blue);
-        StartCoroutine(FindNextCell());
+        yield return StartCoroutine(MineMaze());
 	}
 
-    IEnumerator FindNextCell()
+    IEnumerator MineMaze()
 	{
         while (true)
         {
-            Cell next = current.CheckNeighbour();
+            Cell next = current.FindRandomNeighbour();
             if (next != null)
             {
                 next.isVisited = true;
-                FindWallId(current, next);
+                DestroyWallBetween(current, next);
                 Cell temp = current;
                 current = next;
                 stack.Push(current);
@@ -95,11 +98,11 @@ public class GridManager : MonoBehaviour
                     break;
                 }
             }
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(delay);
         }
     }
 
-	private void FindWallId(Cell current, Cell next)
+	private void DestroyWallBetween(Cell current, Cell next)
 	{
         int xdif = current.i - next.i;
         int ydif = current.j - next.j;
@@ -123,4 +126,58 @@ public class GridManager : MonoBehaviour
             next.DestroyWall(0);
         }
 	}
+
+    IEnumerator dfs() {
+        ResetIsVisited();
+        stack.Clear();
+        List<Cell> neighbours;
+
+        Cell temp;
+        Cell start = grid[0];
+        Cell current = start;
+        stack.Push(current);
+        current.SetTopColor(Color.black);
+
+        Cell end = grid[(cols * rows) -1];
+        start.SetTopColor(Color.red);
+        end.SetTopColor(Color.green);
+		while (stack.Count > 0)
+		{
+            temp = current;
+			current = stack.Pop();
+            temp.SetTopColor(Color.magenta);
+            current.SetTopColor(Color.black);
+			current.isVisited = true;
+            neighbours = current.FindNeighbours();
+            foreach (Cell neighbour in neighbours) {
+                if (neighbour == end)
+                {
+                    parentMap[neighbour] = current;
+                    break;
+                }
+                else
+                {
+                    stack.Push(neighbour);
+                    parentMap[neighbour] = current;
+                }
+            }
+            yield return new WaitForSeconds(delay);
+		}
+        end.SetTopColor(Color.red);
+        current = parentMap[end];
+        while (current != start) {
+            current.SetTopColor(Color.yellow);
+            current = parentMap[current];
+            yield return new WaitForSeconds(delay);
+        }
+        start.SetTopColor(Color.green);
+		yield return new WaitForEndOfFrame();
+    }
+
+    public void ResetIsVisited() {
+        foreach (Cell cell in grid) {
+            cell.isVisited = false;
+        }
+
+    }
 }
