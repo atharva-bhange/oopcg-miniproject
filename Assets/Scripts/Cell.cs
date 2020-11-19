@@ -14,7 +14,6 @@ public class Cell : MonoBehaviour
 	private List<Cell> grid;
 	private int rows;
 	private int cols;
-
 	public void Awake()
 	{
 		gridManager = GameObject.Find("/Grid").GetComponent<GridManager>();
@@ -24,51 +23,27 @@ public class Cell : MonoBehaviour
 	}
 
 
-	public Cell CheckNeighbour()
+	public List<Cell> FindNeighbours()
 	{
 		List<Cell> neighbours = new List<Cell>();
-		try
-		{
-			Cell top = grid[index(i, j - 1)];
-			if (!top.isVisited) {
-				neighbours.Add(top);
+
+		for (int wallId = 0; wallId < walls.Length; wallId++) {
+			if (!walls[wallId]) {
+				Cell neighbour = GetNeighbourForWall(wallId);
+				if (neighbour == null) continue;
+				if (!neighbour.isVisited) neighbours.Add(neighbour);
 			}
 		}
-		catch
-		{
-		}
-		try
-		{
-			Cell right = grid[index(i + 1, j)];
-			if (!right.isVisited)
-			{
-				neighbours.Add(right);
-			}
-		}
-		catch
-		{
-		}
-		try
-		{
-			Cell bottom = grid[index(i, j + 1)];
-			if (!bottom.isVisited)
-			{
-				neighbours.Add(bottom);
-			}
-		}
-		catch 
-		{ 
-		}
-		try
-		{
-			Cell left = grid[index(i - 1, j)];
-			if (!left.isVisited)
-			{
-				neighbours.Add(left);
-			}
-		}
-		catch
-		{
+
+		return neighbours;
+	}
+
+	public Cell FindRandomNeighbour() {
+		List<Cell> neighbours = new List<Cell>();
+		for (int wallId = 0; wallId < 4; wallId++) {
+			Cell neighbour = GetNeighbourForWall(wallId);
+			if (neighbour == null) continue;
+			if (!neighbour.isVisited) neighbours.Add(neighbour);
 		}
 
 		if (neighbours.Count > 0)
@@ -86,7 +61,7 @@ public class Cell : MonoBehaviour
 		if (newi < 0 || newj < 0 || newi > rows-1 || newj > cols-1) {
 			return -1;
 		}
-		return (newi*rows) + newj ;
+		return (newi * cols) + newj;
 	}
 
 	public void SetTopColor(Color color)
@@ -100,5 +75,30 @@ public class Cell : MonoBehaviour
 	{
 		Destroy(wallObjects[wallId]);
 		walls[wallId] = false;
+	}
+
+	public Cell GetNeighbourForWall(int wallId) {
+		int idx;
+		switch (wallId)
+		{
+			case 0:
+				idx = index(i + 1, j);
+				if (idx == -1) return null;
+				return grid[idx];
+			case 1:
+				idx = index(i, j+1);
+				if (idx == -1) return null;
+				return grid[idx];
+			case 2:
+				idx = index(i - 1, j);
+				if (idx == -1) return null;
+				return grid[idx];
+			case 3:
+				idx = index(i, j-1);
+				if (idx == -1) return null;
+				return grid[idx];
+			default:
+				return null;
+		}
 	}
 }
