@@ -11,15 +11,17 @@ public class GridManager : MonoBehaviour
     [Range(0, 1)][SerializeField] float delay = 0.01f;
     private Cell cellComponent;
     public List<Cell> grid = new List<Cell>();
-    public Cell current;
+    //public Cell current;
     Stack<Cell> stack = new Stack<Cell>();
     Dictionary<Cell, Cell> parentMap = new Dictionary<Cell, Cell>();
 
+    Queue<Cell> queue = new Queue<Cell>();      // only used in BFS 
     IEnumerator Start()
     {
         GenerateGrid();
         yield return GenerateMaze();
         yield return dfs();
+        yield return bfs();
     }
 
 	private void GenerateGrid()
@@ -60,17 +62,18 @@ public class GridManager : MonoBehaviour
     }
 
     IEnumerator GenerateMaze()
-    {
-        current = grid[0];
+    {   
+        
+        Cell current = grid[0];
         current.isVisited = true;
         stack.Push(current);
         current.SetTopColor(Color.red);
  
         current.SetTopColor(Color.blue);
-        yield return StartCoroutine(MineMaze());
+        yield return StartCoroutine(MineMaze(current));
 	}
 
-    IEnumerator MineMaze()
+    IEnumerator MineMaze(Cell current)
 	{
         while (true)
         {
@@ -179,5 +182,76 @@ public class GridManager : MonoBehaviour
             cell.isVisited = false;
         }
 
+    }
+    public void ResetColors()
+    {
+        foreach (Cell cell in grid) {
+            cell.SetTopColor(Color.blue);
+        }
+    }
+
+    IEnumerator bfs() {
+        
+        ResetIsVisited();
+        ResetColors();
+        queue.Clear();
+        
+        Cell start = grid[0];
+        Cell current = start;
+        Cell end = grid[(rows * cols) - 1];
+        List<Cell> neighbours;
+
+
+        start.SetTopColor(Color.red);
+        end.SetTopColor(Color.green);
+
+        queue.Enqueue(start);
+        start.isVisited = true;
+        bool breakFlag = false;
+
+        IDictionary<int, Cell> parentTrack = new Dictionary<int, Cell>();
+
+        while (queue.Count > 0) {
+            current = queue.Dequeue();
+            neighbours = current.FindNeighbours();
+
+            foreach (Cell next in neighbours) {
+                if (current == end) {
+                    breakFlag = true;
+                    Console.WriteLine("end found ~~~~~!!!!!!!!!~~~~");
+                    break;
+                }
+                if (!next.isVisited) {
+                    queue.Enqueue(next);
+                    next.isVisited = true;
+                    if (next != end)
+                    {
+                        next.SetTopColor(Color.green);
+                    }
+                    
+                    int indexOfParent = grid.FindIndex(node=> node == next);
+                    parentTrack.Add(indexOfParent, current);
+                }
+
+                next.SetTopColor(Color.magenta);
+            }
+            if (breakFlag) {
+                break;
+            }
+            yield return new WaitForSeconds(delay);
+        }
+        
+        // reverse traversal through parentTrack to find the path
+        // List<Cell> path;  // can be used to store the whole path directly
+        Cell runner = end;
+        while (runner != start) {
+            runner.SetTopColor(Color.yellow);
+            int indexOfRunner = grid.FindIndex(node => node == runner);
+            runner = parentTrack[indexOfRunner];
+            yield return new WaitForSeconds(delay);
+        }
+
+
+        yield return new WaitForEndOfFrame();
     }
 }
