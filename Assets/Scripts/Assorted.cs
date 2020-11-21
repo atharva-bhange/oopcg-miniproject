@@ -12,4 +12,8 @@ public class Assorted : MonoBehaviour
 			gridManager.ResetColors();
 		}
 	}
+
+	public void OnQuitClicked() {
+		Application.Quit();
+	}
 }
