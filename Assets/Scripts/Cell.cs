@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Cell : MonoBehaviour
 {
-    public bool [] walls = {true, true, true, true}; // N , E , S , W
+    public bool [] walls = {false, false, false, false}; // N , E , S , W
 	public List<GameObject> wallObjects = new List<GameObject>();
 	public int i;
 	public int j;
@@ -56,7 +56,7 @@ public class Cell : MonoBehaviour
 		}
 	}
 
-	private int index(int newi, int newj)
+	public int index(int newi, int newj)
 	{
 		if (newi < 0 || newj < 0 || newi > rows-1 || newj > cols-1) {
 			return -1;
