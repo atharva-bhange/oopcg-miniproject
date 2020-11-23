@@ -46,6 +46,8 @@ public class PathFinder : MonoBehaviour
         gridManager.ResetColors();
         queue.Clear();
 
+        grid = gridManager.grid;
+
         Cell start = grid[0];
         Cell current = start;
         Cell end = grid[(rows * cols) - 1];
