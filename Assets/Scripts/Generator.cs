@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ public class Generator : MonoBehaviour
     private GridManager gridManager;
     private List<Cell> grid;
     private int selected;
+    private int rows;
+    private int cols;
 
     public void onButtonClick() {
         StartCoroutine(GenerateMaze());
@@ -17,6 +20,8 @@ public class Generator : MonoBehaviour
 	{
 		gridManager = GameObject.Find("/Grid").GetComponent<GridManager>();
 		grid = gridManager.grid;
+        rows = gridManager.rows;
+        cols = gridManager.cols;
         selected = gridManager.generator;
         gridManager.ResetGrid();
         if (!gridManager.isProcessing) {
@@ -27,22 +32,36 @@ public class Generator : MonoBehaviour
                 case 0:
                     yield return StartCoroutine(DFS_Backtracking());
                     break;
+                case 1:
+                    yield return StartCoroutine(Double_DFS_Backtracking());
+                    break;
                 default:
                     break;
             }
             gridManager.isGenerated = true;
             gridManager.isProcessing = false;
+            // Setting Default Start and EndPoint
+            gridManager.startPoint = grid[0];
+            gridManager.endPoint = grid[(rows * cols) - 1];
+            gridManager.startPoint.SetTopColor(gridManager.startPointColor);
+            gridManager.endPoint.SetTopColor(gridManager.endPointColor);
         }
     }
 
-    IEnumerator DFS_Backtracking()
+    IEnumerator Double_DFS_Backtracking()
 	{
-		Cell current = grid[0];
+        yield return StartCoroutine(DFS_Backtracking());
+        yield return StartCoroutine(DFS_Backtracking());
+	}
+
+	IEnumerator DFS_Backtracking()
+	{
+        gridManager.ResetIsVisited();
+		Cell current = grid[UnityEngine.Random.Range(0, rows*cols -1)];
 		current.isVisited = true;
 		stack.Push(current);
-		current.SetTopColor(Color.red);
+		current.SetTopColor(gridManager.resetGridColor);
 
-		current.SetTopColor(Color.blue);
 		yield return StartCoroutine(MineMaze(current));
 	}
 
@@ -59,16 +78,16 @@ public class Generator : MonoBehaviour
                 Cell temp = current;
                 current = next;
                 stack.Push(current);
-                current.SetTopColor(Color.red);
-                temp.SetTopColor(Color.blue);
+                current.SetTopColor(gridManager.headColor);
+                temp.SetTopColor(gridManager.resetGridColor);
             }
             else
             {
-                current.SetTopColor(Color.blue);
+                current.SetTopColor(gridManager.resetGridColor);
                 if (stack.Count > 0)
                 {
                     current = stack.Pop();
-                    current.SetTopColor(Color.red);
+                    current.SetTopColor(gridManager.headColor);
                 }
                 else
                 {
