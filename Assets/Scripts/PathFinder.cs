@@ -23,16 +23,18 @@ public class PathFinder : MonoBehaviour
 		selected = gridManager.pathfinder;
         rows = gridManager.rows;
         cols = gridManager.cols;
-        
+        Cell startPoint = gridManager.startPoint;
+        Cell endPoint = gridManager.endPoint;
+
         if (gridManager.isGenerated && !gridManager.isProcessing) {
             gridManager.isProcessing = true;
             switch (selected)
             {
                 case 0:
-                    yield return StartCoroutine(BFS());
+                    yield return StartCoroutine(BFS(startPoint, endPoint));
                     break;
                 case 1:
-                    yield return StartCoroutine(DFS());
+                    yield return StartCoroutine(DFS(startPoint, endPoint));
                     break;
                 default:
                     break;
@@ -41,18 +43,20 @@ public class PathFinder : MonoBehaviour
             gridManager.isProcessing = false;
         }
 	}
-    IEnumerator BFS()
+    IEnumerator BFS(Cell startPoint,Cell endPoint)
     {
         gridManager.ResetIsVisited();
         gridManager.ResetColors();
         queue.Clear();
 
         //grid = gridManager.grid;
-        bool breakFlag = false;
+        // bool breakFlag = false;
 
-        Cell start = grid[0];
-        Cell current = start;
-        Cell end = grid[(rows * cols) - 1];
+        //Cell start = grid[0];
+        Cell start = startPoint;
+        Cell current = start ;
+        Cell end = endPoint;
+        //Cell end = grid[(rows * cols) - 1];
         List<Cell> neighbours;
 
 
@@ -119,18 +123,20 @@ public class PathFinder : MonoBehaviour
     }
 
 
-    IEnumerator DFS()
+    IEnumerator DFS(Cell startPoint, Cell endPoint)
     {
         gridManager.ResetIsVisited();
         gridManager.ResetColors();
         stack.Clear();
         Dictionary<Cell, Cell> parentMap = new Dictionary<Cell, Cell>();
-        Cell start = grid[0];
+        //Cell start = grid[0];
+        Cell start = startPoint;
         Cell current = start;
         stack.Push(current);
         current.SetTopColor(Color.black);
 
-        Cell end = grid[(cols * rows) - 1];
+        //Cell end = grid[(cols * rows) - 1];
+        Cell end = endPoint;
         start.SetTopColor(Color.red);
         end.SetTopColor(Color.green);
 

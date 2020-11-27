@@ -16,10 +16,14 @@ public class GridManager : MonoBehaviour
     public List<Cell> grid = new List<Cell>();
     private Cell cellComponent;
     private List<GameObject> cellObjects = new List<GameObject>();
+    public Cell startPoint;
+    public Cell endPoint;
 
     void Start()
     {
         GenerateGrid();
+        startPoint = grid[0];
+        endPoint = grid[(rows * cols) - 1];
     }
 
     public void SelectGenerator(int option) {
