@@ -23,10 +23,6 @@ public class Cell : MonoBehaviour
 		cols = gridManager.cols;
 	}
 
-	void onMouseOver() {
-		print("hellooooooooooooooooooo");
-	}
-
 	public List<Cell> FindNeighbours()
 	{
 		List<Cell> neighbours = new List<Cell>();

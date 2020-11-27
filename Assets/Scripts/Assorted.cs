@@ -18,8 +18,4 @@ public class Assorted : MonoBehaviour
 		Application.Quit();
 	}
 
-	public void ListenToMouse() {
-		quadSurface = GameObject.Find("/Top").GetComponent<Mouse>();
-		
-	}
 }

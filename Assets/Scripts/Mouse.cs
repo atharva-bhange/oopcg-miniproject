@@ -4,10 +4,10 @@ using UnityEngine;
 using System;
 public class Mouse : MonoBehaviour
 {
-    public GridManager gridManager;
-    public MeshRenderer topMeshRenderer;
-    public int rows;
-    public int cols;
+    GridManager gridManager;
+    MeshRenderer topMeshRenderer;
+    int rows;
+    int cols;
     void Start()
     {
         gridManager = GameObject.Find("/Grid").GetComponent<GridManager>();
@@ -17,24 +17,22 @@ public class Mouse : MonoBehaviour
     }
     void OnMouseOver() {
         MeshRenderer topMeshRenderer = transform.GetComponent<MeshRenderer>();
-        if (gridManager.isGenerated && !gridManager.isProcessing && Input.GetKey(KeyCode.LeftControl))
+        if (gridManager.isGenerated && !gridManager.isProcessing )
         {            
-            if (Input.GetKeyDown(KeyCode.Mouse0) && !Input.GetKey(KeyCode.LeftShift)) {
-                gridManager.startPoint.SetTopColor(Color.blue);
+            if (Input.GetKeyDown(KeyCode.Mouse0) && Input.GetKey(KeyCode.LeftControl)) {
+                gridManager.startPoint.SetTopColor(gridManager.resetGridColor);
                 string parentName = transform.parent.parent.name;
                 Cell start = GameObject.Find($"/Grid/{parentName}").GetComponent<Cell>();
                 gridManager.startPoint = start;
-                topMeshRenderer.material.color = Color.red;
-                print("Start point selected !!!!!!!!");  
+                start.SetTopColor(gridManager.startPointColor);
             }
-            else if(Input.GetKeyDown(KeyCode.Mouse0) && Input.GetKey(KeyCode.LeftShift))
+            else if(Input.GetKeyDown(KeyCode.Mouse1) && Input.GetKey(KeyCode.LeftControl))
             {
-                gridManager.endPoint.SetTopColor(Color.blue);
+                gridManager.endPoint.SetTopColor(gridManager.resetGridColor);
                 string parentName = transform.parent.parent.name;
                 Cell end = GameObject.Find($"/Grid/{parentName}").GetComponent<Cell>();
                 gridManager.endPoint = end;
-                topMeshRenderer.material.color = Color.green;
-                print("End point selected !!!!!!!!");
+                end.SetTopColor(gridManager.endPointColor);
             }
 
         }

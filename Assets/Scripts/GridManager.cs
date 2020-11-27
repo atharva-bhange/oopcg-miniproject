@@ -7,6 +7,13 @@ public class GridManager : MonoBehaviour
 {
     [Range(1, 50)][SerializeField] public int rows = 20;
     [Range(1, 50)][SerializeField] public int cols = 20;
+    [SerializeField] public Color initGridColor = Color.green;
+    [SerializeField] public Color resetGridColor = Color.blue;
+    [SerializeField] public Color headColor = Color.black;
+    [SerializeField] public Color traversalColor = Color.magenta;
+    [SerializeField] public Color pathColor = Color.yellow;
+    [SerializeField] public Color startPointColor = Color.green;
+    [SerializeField] public Color endPointColor = Color.red;
     private float blockSize = 1;
     public float delay = 0.01f;
     public int generator = 0;
@@ -22,8 +29,7 @@ public class GridManager : MonoBehaviour
     void Start()
     {
         GenerateGrid();
-        startPoint = grid[0];
-        endPoint = grid[(rows * cols) - 1];
+
     }
 
     public void SelectGenerator(int option) {
@@ -95,8 +101,10 @@ public class GridManager : MonoBehaviour
 
             foreach (Cell cell in grid)
             {
-                cell.SetTopColor(Color.blue);
+                cell.SetTopColor(resetGridColor);
             }
+        startPoint.SetTopColor(startPointColor);
+        endPoint.SetTopColor(endPointColor);
         
     }
 
@@ -109,7 +117,7 @@ public class GridManager : MonoBehaviour
                 cellComponent = cell;
                 GameObject cellGameObject = cellObjects[cell.index(cell.i, cell.j)];
                 DrawWalls(referenceWall, cellGameObject);
-                cell.SetTopColor(Color.green);
+                cell.SetTopColor(initGridColor);
                 cell.isVisited = false;
             }
             Destroy(referenceWall);
