@@ -10,6 +10,7 @@ public class Cell : MonoBehaviour
 	public int i;
 	public int j;
     public bool isVisited;
+	public int distanceFromNeighbour = 1;
 	private GridManager gridManager;
 	private List<Cell> grid;
 	private int rows;
