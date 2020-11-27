@@ -5,6 +5,7 @@ using UnityEngine;
 public class Assorted : MonoBehaviour
 {
 	private GridManager gridManager;
+	private Mouse quadSurface;
 	public void OnResetClicked() {
 		gridManager = GameObject.Find("/Grid").GetComponent<GridManager>();
 		if (!gridManager.isProcessing && gridManager.isGenerated) {
@@ -15,5 +16,10 @@ public class Assorted : MonoBehaviour
 
 	public void OnQuitClicked() {
 		Application.Quit();
+	}
+
+	public void ListenToMouse() {
+		quadSurface = GameObject.Find("/Top").GetComponent<Mouse>();
+		
 	}
 }
