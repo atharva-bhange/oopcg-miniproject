@@ -134,8 +134,8 @@ public class PathFinder : MonoBehaviour
         current.SetTopColor(Color.black);
 
         Cell end = grid[(cols * rows) - 1];
-        start.SetTopColor(Color.red);
-        end.SetTopColor(Color.green);
+        start.SetTopColor(Color.green);
+        end.SetTopColor(Color.red);
 
         yield return StartCoroutine(StartDfsTraversing(start, end, current, parentMap));
         yield return StartCoroutine(ColorDfsPath(start, end, current, parentMap));
@@ -144,7 +144,8 @@ public class PathFinder : MonoBehaviour
     IEnumerator StartDfsTraversing(Cell start, Cell end, Cell current, Dictionary<Cell, Cell> parentMap) {
         List<Cell> neighbours;
         Cell temp;
-        while (stack.Count > 0)
+        bool isRunning = true;
+        while (stack.Count > 0 && isRunning)
         {
             temp = current;
             current = stack.Pop();
@@ -156,7 +157,9 @@ public class PathFinder : MonoBehaviour
             {
                 if (neighbour == end)
                 {
+                    current.SetTopColor(Color.magenta);
                     parentMap[neighbour] = current;
+                    isRunning = false;
                     break;
                 }
                 else
