@@ -9,6 +9,7 @@ public class PathFinder : MonoBehaviour
     private int rows;
     private int cols;
     private int selected;
+    //private bool breakFlag = false;
     Queue<Cell> queue = new Queue<Cell>();
     Stack<Cell> stack = new Stack<Cell>();
 
@@ -46,7 +47,8 @@ public class PathFinder : MonoBehaviour
         gridManager.ResetColors();
         queue.Clear();
 
-        grid = gridManager.grid;
+        //grid = gridManager.grid;
+        bool breakFlag = false;
 
         Cell start = grid[0];
         Cell current = start;
@@ -59,42 +61,44 @@ public class PathFinder : MonoBehaviour
 
         queue.Enqueue(start);
         start.isVisited = true;
-        bool breakFlag = false;
+        
 
         IDictionary<int, Cell> parentTrack = new Dictionary<int, Cell>();
 
-        while (queue.Count > 0)
+        while (current != end )
         {
             current = queue.Dequeue();
             neighbours = current.FindNeighbours();
 
             foreach (Cell next in neighbours)
             {
-                if (current == end)
-                {
-                    breakFlag = true;
-                    break;
-                }
+                //if (current == end)
+                //{
+                //    breakFlag = true;
+                //    break;
+                //}
                 if (!next.isVisited)
                 {
                     queue.Enqueue(next);
                     next.isVisited = true;
-                    if (next != end)
-                    {
-                        next.SetTopColor(Color.green);
-                    }
+                    ///if (next != end)
+                    ///{
+                       // next.SetTopColor(Color.green);
+                       // print("grenns");
+                    //}
 
                     int indexOfParent = grid.FindIndex(node => node == next);
                     parentTrack.Add(indexOfParent, current);
                 }
+                //if (breakFlag) {
+                 //   break;
+                //}
 
                 next.SetTopColor(Color.magenta);
             }
-            if (breakFlag)
-            {
-                break;
-            }
+            
             yield return new WaitForSeconds(gridManager.delay);
+            
         }
 
         // reverse traversal through parentTrack to find the path
