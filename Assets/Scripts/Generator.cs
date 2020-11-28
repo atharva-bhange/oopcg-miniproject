@@ -26,7 +26,7 @@ public class Generator : MonoBehaviour
         gridManager.ResetGrid();
         if (!gridManager.isProcessing) {
             gridManager.isProcessing = true;
-            
+            gridManager.isGenerated = false;
             switch (selected)
             {
                 case 0:
