@@ -770,6 +770,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rows: 15
   cols: 15
+  initGridColor: {r: 0, g: 1, b: 0, a: 1}
+  resetGridColor: {r: 0, g: 0, b: 1, a: 1}
+  headColor: {r: 0, g: 0, b: 0, a: 1}
+  traversalColor: {r: 1, g: 0, b: 1, a: 1}
+  pathColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  startPointColor: {r: 0, g: 1, b: 0, a: 1}
+  endPointColor: {r: 1, g: 0, b: 0, a: 1}
   delay: 0.01
   generator: 0
   pathfinder: 0
@@ -2467,8 +2474,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 401, y: -38}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 442, y: -38}
+  m_SizeDelta: {x: 119.5329, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &880692256
 MonoBehaviour:
@@ -4809,8 +4816,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 144, y: -38}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 181.6, y: -38}
+  m_SizeDelta: {x: 217.18176, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2139157359
 MonoBehaviour:
@@ -4863,7 +4870,7 @@ MonoBehaviour:
     m_Options:
     - m_Text: DFS + Backtracking
       m_Image: {fileID: 0}
-    - m_Text: Recursive Division
+    - m_Text: Double DFS + Backtracking
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
