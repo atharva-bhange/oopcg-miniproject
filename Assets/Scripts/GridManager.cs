@@ -35,6 +35,8 @@ public class GridManager : MonoBehaviour
     private List<GameObject> cellObjects = new List<GameObject>();
     public Cell startPoint;
     public Cell endPoint;
+    public Cell prevCell;
+    public Cell currentCell;
 
 	private void Awake()
 	{
@@ -60,7 +62,6 @@ public class GridManager : MonoBehaviour
     public void SetSpeed(float speed) {
         delay = 1f - speed;
     }
-
 	private void GenerateGrid()
 	{
         GameObject referenceCell = (GameObject)Instantiate(Resources.Load("Cell"));
@@ -124,7 +125,6 @@ public class GridManager : MonoBehaviour
         endPoint.SetTopColor(endPointColor);
         
     }
-
     public void ResetGrid() {
         if (!isProcessing)
         {
