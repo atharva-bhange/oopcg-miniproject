@@ -98,7 +98,7 @@ public class Generator : MonoBehaviour
         }
     }
 
-    private void DestroyWallBetween(Cell current, Cell next)
+    public void DestroyWallBetween(Cell current, Cell next)
     {
         int xdif = current.i - next.i;
         int ydif = current.j - next.j;

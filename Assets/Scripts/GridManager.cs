@@ -25,6 +25,8 @@ public class GridManager : MonoBehaviour
     private List<GameObject> cellObjects = new List<GameObject>();
     public Cell startPoint;
     public Cell endPoint;
+    public Cell prevCell;
+    public Cell currentCell;
 
     void Start()
     {

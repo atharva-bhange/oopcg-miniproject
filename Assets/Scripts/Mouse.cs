@@ -4,29 +4,37 @@ using UnityEngine;
 using System;
 public class Mouse : MonoBehaviour
 {
+    // for selecting start and end
     GridManager gridManager;
     MeshRenderer topMeshRenderer;
     int rows;
     int cols;
+
+    // for wall deletion
+
+
+
     void Start()
     {
         gridManager = GameObject.Find("/Grid").GetComponent<GridManager>();
         rows = gridManager.rows;
         cols = gridManager.cols;
-        
+
     }
-    void OnMouseOver() {
+    void OnMouseOver()
+    {
         MeshRenderer topMeshRenderer = transform.GetComponent<MeshRenderer>();
-        if (gridManager.isGenerated && !gridManager.isProcessing )
-        {            
-            if (Input.GetKeyDown(KeyCode.Mouse0) && Input.GetKey(KeyCode.LeftControl)) {
+        if (gridManager.isGenerated && !gridManager.isProcessing)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0) && Input.GetKey(KeyCode.LeftControl))
+            {
                 gridManager.startPoint.SetTopColor(gridManager.resetGridColor);
                 string parentName = transform.parent.parent.name;
                 Cell start = GameObject.Find($"/Grid/{parentName}").GetComponent<Cell>();
                 gridManager.startPoint = start;
                 start.SetTopColor(gridManager.startPointColor);
             }
-            else if(Input.GetKeyDown(KeyCode.Mouse1) && Input.GetKey(KeyCode.LeftControl))
+            else if (Input.GetKeyDown(KeyCode.Mouse1) && Input.GetKey(KeyCode.LeftControl))
             {
                 gridManager.endPoint.SetTopColor(gridManager.resetGridColor);
                 string parentName = transform.parent.parent.name;
@@ -34,8 +42,10 @@ public class Mouse : MonoBehaviour
                 gridManager.endPoint = end;
                 end.SetTopColor(gridManager.endPointColor);
             }
+            
 
         }
     }
+
     
 }

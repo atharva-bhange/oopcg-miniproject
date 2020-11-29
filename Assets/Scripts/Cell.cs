@@ -38,6 +38,7 @@ public class Cell : MonoBehaviour
 		return neighbours;
 	}
 
+
 	public Cell FindRandomNeighbour() {
 		List<Cell> neighbours = new List<Cell>();
 		for (int wallId = 0; wallId < 4; wallId++) {
