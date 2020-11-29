@@ -26,6 +26,7 @@ public class GridManager : MonoBehaviour
     public Cell startPoint;
     public Cell endPoint;
     public Cell prevCell;
+    public Cell currentCell;
 
     void Start()
     {
