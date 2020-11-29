@@ -17,7 +17,6 @@ public class PlayerMovement : MonoBehaviour
     public bool isGrounded;
 
     public float jumpHeight = 3f;
-    // Update is called once per frame
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);

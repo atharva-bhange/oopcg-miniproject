@@ -2,9 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GridManager : MonoBehaviour
 {
+    public TMPro.TMP_Dropdown GeneratorSelect;
+    public TMPro.TMP_Dropdown AlgorithmSelect;
+    public Button GenerateButton;
+    public Button PathFindButton;
+    public Button ResetButton;
+    public Slider Slider;
     public Camera main;
     public Camera player;
     public bool isMainCamera = true;
@@ -142,10 +149,22 @@ public class GridManager : MonoBehaviour
                 player.enabled = false;
                 main.enabled = true;
                 Cursor.lockState = CursorLockMode.None;
+                GeneratorSelect.interactable = true;
+                AlgorithmSelect.interactable = true;
+                GenerateButton.interactable = true;
+                PathFindButton.interactable = true;
+                ResetButton.interactable = true;
+                Slider.interactable = true;
             } else {
                 main.enabled = false;
                 player.enabled = true;
                 Cursor.lockState = CursorLockMode.Locked;
+                GeneratorSelect.interactable = false;
+                AlgorithmSelect.interactable = false;
+                GenerateButton.interactable = false;
+                PathFindButton.interactable = false;
+                ResetButton.interactable = false;
+                Slider.interactable = false;
             }
         }
 	}

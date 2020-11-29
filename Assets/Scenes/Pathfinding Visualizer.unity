@@ -1132,6 +1132,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae55b3f0fb82aac4e99252ced6a2088b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GeneratorSelect: {fileID: 2139157359}
+  AlgorithmSelect: {fileID: 1152635177}
+  GenerateButton: {fileID: 880692256}
+  PathFindButton: {fileID: 1768730492}
+  ResetButton: {fileID: 20168446}
+  Slider: {fileID: 43550235}
   main: {fileID: 963194227}
   player: {fileID: 25610533}
   isMainCamera: 1
