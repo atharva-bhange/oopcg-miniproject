@@ -8,6 +8,7 @@ public class Mouse : MonoBehaviour
     MeshRenderer topMeshRenderer;
     int rows;
     int cols;
+    public Generator gen1;
     void Start()
     {
         gridManager = GameObject.Find("/Grid").GetComponent<GridManager>();

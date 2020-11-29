@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
+    public Camera main;
+    public Camera player;
+    public bool isMainCamera = true;
     [Range(1, 50)][SerializeField] public int rows = 20;
     [Range(1, 50)][SerializeField] public int cols = 20;
     [SerializeField] public Color initGridColor = Color.green;
@@ -26,7 +29,14 @@ public class GridManager : MonoBehaviour
     public Cell startPoint;
     public Cell endPoint;
 
-    void Start()
+	private void Awake()
+	{
+       
+        player.enabled = false;
+        main.enabled = true;
+    }
+
+	void Start()
     {
         GenerateGrid();
 
@@ -123,4 +133,20 @@ public class GridManager : MonoBehaviour
             Destroy(referenceWall);
         }
     }
+
+	private void Update()
+	{
+        if (Input.GetKeyDown(KeyCode.Tab)) {
+            isMainCamera = isMainCamera ? false : true;
+            if (isMainCamera) {
+                player.enabled = false;
+                main.enabled = true;
+                Cursor.lockState = CursorLockMode.None;
+            } else {
+                main.enabled = false;
+                player.enabled = true;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+	}
 }
