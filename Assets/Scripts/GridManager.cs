@@ -2,9 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GridManager : MonoBehaviour
 {
+    public TMPro.TMP_Dropdown GeneratorSelect;
+    public TMPro.TMP_Dropdown AlgorithmSelect;
+    public Button GenerateButton;
+    public Button PathFindButton;
+    public Button ResetButton;
+    public Slider Slider;
+    public Camera main;
+    public Camera player;
+    public bool isMainCamera = true;
     [Range(1, 50)][SerializeField] public int rows = 20;
     [Range(1, 50)][SerializeField] public int cols = 20;
     [SerializeField] public Color initGridColor = Color.green;
@@ -25,8 +35,17 @@ public class GridManager : MonoBehaviour
     private List<GameObject> cellObjects = new List<GameObject>();
     public Cell startPoint;
     public Cell endPoint;
+    public Cell prevCell;
+    public Cell currentCell;
 
-    void Start()
+	private void Awake()
+	{
+       
+        player.enabled = false;
+        main.enabled = true;
+    }
+
+	void Start()
     {
         GenerateGrid();
 
@@ -43,7 +62,6 @@ public class GridManager : MonoBehaviour
     public void SetSpeed(float speed) {
         delay = 1f - speed;
     }
-
 	private void GenerateGrid()
 	{
         GameObject referenceCell = (GameObject)Instantiate(Resources.Load("Cell"));
@@ -107,7 +125,6 @@ public class GridManager : MonoBehaviour
         endPoint.SetTopColor(endPointColor);
         
     }
-
     public void ResetGrid() {
         if (!isProcessing)
         {
@@ -123,4 +140,32 @@ public class GridManager : MonoBehaviour
             Destroy(referenceWall);
         }
     }
+
+	private void Update()
+	{
+        if (Input.GetKeyDown(KeyCode.Tab)) {
+            isMainCamera = isMainCamera ? false : true;
+            if (isMainCamera) {
+                player.enabled = false;
+                main.enabled = true;
+                Cursor.lockState = CursorLockMode.None;
+                GeneratorSelect.interactable = true;
+                AlgorithmSelect.interactable = true;
+                GenerateButton.interactable = true;
+                PathFindButton.interactable = true;
+                ResetButton.interactable = true;
+                Slider.interactable = true;
+            } else {
+                main.enabled = false;
+                player.enabled = true;
+                Cursor.lockState = CursorLockMode.Locked;
+                GeneratorSelect.interactable = false;
+                AlgorithmSelect.interactable = false;
+                GenerateButton.interactable = false;
+                PathFindButton.interactable = false;
+                ResetButton.interactable = false;
+                Slider.interactable = false;
+            }
+        }
+	}
 }

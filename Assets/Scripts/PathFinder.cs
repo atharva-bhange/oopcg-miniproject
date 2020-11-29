@@ -53,41 +53,34 @@ public class PathFinder : MonoBehaviour
         Cell current = start ;
         Cell end = endPoint;
         List<Cell> neighbours;
-
+        List<Cell> neighboursOfEnd;
 
         start.SetTopColor(gridManager.startPointColor);
         end.SetTopColor(gridManager.endPointColor);
 
         queue.Enqueue(start);
         start.isVisited = true;
-        
 
         IDictionary<int, Cell> parentTrack = new Dictionary<int, Cell>();
-
-        while (current != end )
+        neighboursOfEnd = end.FindNeighbours();
+        while (current != end && !neighboursOfEnd.Contains(current))
         {
             current = queue.Dequeue();
             neighbours = current.FindNeighbours();
 
             foreach (Cell next in neighbours)
             {
-                if (!next.isVisited)
-                {
+                next.SetTopColor(gridManager.traversalColor);
+                if (!next.isVisited )
+                { 
                     queue.Enqueue(next);
                     next.isVisited = true;
                     int indexOfParent = grid.FindIndex(node => node == next);
                     parentTrack.Add(indexOfParent, current);
                 }
-
-                next.SetTopColor(gridManager.traversalColor);
-            }
-            
-            yield return new WaitForSeconds(gridManager.delay);
-            
-        }
-
-        // Reverse traversal through parentTrack to find the path
-        // List<Cell> path;  // can be used to store the whole path directly
+            } 
+            yield return new WaitForSeconds(gridManager.delay);     
+        }        
         
         Cell runner = end;
         while (runner != start)
@@ -102,7 +95,6 @@ public class PathFinder : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
     }
-
 
     IEnumerator DFS()
     {
