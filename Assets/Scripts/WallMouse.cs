@@ -12,7 +12,6 @@ public class WallMouse : MonoBehaviour
         generator = GameObject.Find("/Canvas/Generate Maze/").GetComponent<Generator>();
 
     }
-
     void OnMouseOver()
         {
         if (gridManager.isGenerated && !gridManager.isProcessing)

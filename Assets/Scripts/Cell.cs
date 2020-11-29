@@ -22,7 +22,6 @@ public class Cell : MonoBehaviour
 		rows = gridManager.rows;
 		cols = gridManager.cols;
 	}
-
 	public List<Cell> FindNeighbours()
 	{
 		List<Cell> neighbours = new List<Cell>();

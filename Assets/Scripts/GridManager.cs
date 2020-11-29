@@ -45,7 +45,6 @@ public class GridManager : MonoBehaviour
     public void SetSpeed(float speed) {
         delay = 1f - speed;
     }
-
 	private void GenerateGrid()
 	{
         GameObject referenceCell = (GameObject)Instantiate(Resources.Load("Cell"));
@@ -109,7 +108,6 @@ public class GridManager : MonoBehaviour
         endPoint.SetTopColor(endPointColor);
         
     }
-
     public void ResetGrid() {
         if (!isProcessing)
         {

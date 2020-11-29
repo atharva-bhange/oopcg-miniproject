@@ -4,15 +4,10 @@ using UnityEngine;
 using System;
 public class Mouse : MonoBehaviour
 {
-    // for selecting start and end
     GridManager gridManager;
     MeshRenderer topMeshRenderer;
     int rows;
     int cols;
-
-    // for wall deletion
-
-
 
     void Start()
     {

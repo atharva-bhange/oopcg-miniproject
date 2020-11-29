@@ -6,18 +6,18 @@ using UnityEngine.UI;
 public class SetLegendColor : MonoBehaviour
 {
     private GridManager gridManager;
-    private string name;
+    private string ObjectName;
     private Image image;
     void Start()
     {
         gridManager = GameObject.Find("/Grid").GetComponent<GridManager>();
-        name = transform.name;
+        ObjectName = transform.name;
         image = transform.GetComponent<Image>();
     }
     
     void Update()
     {
-        switch (name) {
+        switch (ObjectName) {
             case "start":
                 image.color = gridManager.startPointColor;
                 break;

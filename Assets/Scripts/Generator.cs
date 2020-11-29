@@ -17,14 +17,15 @@ public class Generator : MonoBehaviour
     }
 
     IEnumerator GenerateMaze()
-	{
-		gridManager = GameObject.Find("/Grid").GetComponent<GridManager>();
-		grid = gridManager.grid;
+    {
+        gridManager = GameObject.Find("/Grid").GetComponent<GridManager>();
+        grid = gridManager.grid;
         rows = gridManager.rows;
         cols = gridManager.cols;
         selected = gridManager.generator;
         gridManager.ResetGrid();
-        if (!gridManager.isProcessing) {
+        if (!gridManager.isProcessing)
+        {
             gridManager.isProcessing = true;
             gridManager.isGenerated = false;
             switch (selected)
@@ -47,13 +48,11 @@ public class Generator : MonoBehaviour
             gridManager.endPoint.SetTopColor(gridManager.endPointColor);
         }
     }
-
     IEnumerator Double_DFS_Backtracking()
 	{
         yield return StartCoroutine(DFS_Backtracking());
         yield return StartCoroutine(DFS_Backtracking());
 	}
-
 	IEnumerator DFS_Backtracking()
 	{
         gridManager.ResetIsVisited();
@@ -64,8 +63,6 @@ public class Generator : MonoBehaviour
 
 		yield return StartCoroutine(MineMaze(current));
 	}
-
-
 	IEnumerator MineMaze(Cell current)
     {
         while (true)
@@ -97,7 +94,6 @@ public class Generator : MonoBehaviour
             yield return new WaitForSeconds(gridManager.delay);
         }
     }
-
     public void DestroyWallBetween(Cell current, Cell next)
     {
         int xdif = current.i - next.i;
